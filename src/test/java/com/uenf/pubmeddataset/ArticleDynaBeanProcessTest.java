@@ -2,22 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package testing;
+package com.uenf.pubmeddataset;
 
+import com.uenf.pubmeddataset.internet.DownloadConfiguration;
+import com.uenf.pubmeddataset.internet.ParameterName;
+import com.uenf.pubmeddataset.util.ArticleAttribute;
+import com.uenf.pubmeddataset.util.DynaArticle;
+import com.uenf.pubmeddataset.util.EmptyObjectException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import pmdataset.internet.ArticleDownloader;
+import com.uenf.pubmeddataset.internet.ArticleDownloader;
 import java.util.Iterator;
 import org.junit.BeforeClass;
-import pmdataset.internet.ParameterName;
-import pmdataset.util.DynaArticle;
-import pmdataset.internet.DownloadConfiguration;
-import pmdataset.util.ArticleAttribute;
 import org.junit.Test;
-import pmdataset.util.EmptyObjectException;
 import static org.junit.Assert.*;
-import static pmdataset.internet.ParameterName.*;
+import static com.uenf.pubmeddataset.internet.ParameterName.*;
 
 /**
  *

@@ -2,20 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package testing;
+package com.uenf.pubmeddataset;
 
+import com.uenf.pubmeddataset.internet.ArticleDownloader;
+import com.uenf.pubmeddataset.internet.DownloadConfiguration;
+import com.uenf.pubmeddataset.util.DataSet;
+import com.uenf.pubmeddataset.util.DynaArticle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
-import pmdataset.util.DataSet;
 import java.util.Set;
 import org.junit.Test;
-import pmdataset.internet.ArticleDownloader;
-import pmdataset.internet.DownloadConfiguration;
-import pmdataset.util.DynaArticle;
-import static pmdataset.internet.ParameterName.*;
+import static com.uenf.pubmeddataset.internet.ParameterName.*;
 import static org.junit.Assert.*;
 import static org.junit.matchers.JUnitMatchers.*;
 import static org.junit.Assert.assertThat;

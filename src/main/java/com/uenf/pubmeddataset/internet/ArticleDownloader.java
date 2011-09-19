@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pmdataset.internet;
+package com.uenf.pubmeddataset.internet;
 
+import com.uenf.pubmeddataset.util.DynaArticle;
+import com.uenf.pubmeddataset.util.EmptyObjectException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,8 +19,6 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.Element;
-import pmdataset.util.DynaArticle;
-import pmdataset.util.EmptyObjectException;
 
 /**
  *

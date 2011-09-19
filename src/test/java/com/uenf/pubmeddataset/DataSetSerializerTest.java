@@ -2,16 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package testing;
+package com.uenf.pubmeddataset;
 
+import com.uenf.pubmeddataset.internet.DownloadConfiguration;
+import com.uenf.pubmeddataset.persistence.DataSetSerializer;
+import com.uenf.pubmeddataset.util.DynaArticle;
 import java.io.File;
 import java.util.HashSet;
-import pmdataset.persistence.DataSetSerializer;
 import java.util.Set;
 import org.junit.Test;
-import pmdataset.internet.DownloadConfiguration;
-import pmdataset.util.DynaArticle;
-import static pmdataset.internet.ParameterName.*;
+import static com.uenf.pubmeddataset.internet.ParameterName.*;
 import static org.junit.Assert.*;
 
 /**

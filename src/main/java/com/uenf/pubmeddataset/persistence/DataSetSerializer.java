@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pmdataset.persistence;
+package com.uenf.pubmeddataset.persistence;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,7 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pmdataset.util.DataSet;
+import com.uenf.pubmeddataset.util.DataSet;
 
 /**
  *

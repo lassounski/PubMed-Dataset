@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pmdataset.internet;
+package com.uenf.pubmeddataset.internet;
 
 import java.util.HashMap;
 import java.util.Map;

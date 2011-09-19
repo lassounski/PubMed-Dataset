@@ -2,15 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pmdataset.util;
+package com.uenf.pubmeddataset.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import static pmdataset.internet.ParameterName.*;
-
+import static com.uenf.pubmeddataset.internet.ParameterName.*;
 /**
  *
  * @author Kirill
