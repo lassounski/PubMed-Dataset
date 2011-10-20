@@ -145,7 +145,7 @@ public class ArticleDownloader {
      * @return
      * @throws Exception
      */
-    private Set<DynaArticle> downloadArticles(List<String> ids) {
+    protected Set<DynaArticle> downloadArticles(List<String> ids) {
         Set<DynaArticle> articles = new HashSet<DynaArticle>(ids.size() / 2);
         String idsString = formatIds(ids);
         String url = fetchPubMedUrl + idsString;
