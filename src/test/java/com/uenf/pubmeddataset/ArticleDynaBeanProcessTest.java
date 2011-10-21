@@ -83,23 +83,23 @@ public class ArticleDynaBeanProcessTest {
         assertArticlesContainData(articles);
     }
 
-    @Test
-    public void shouldDownloadMeshTermsAndAuthorKwsAsSet() throws Exception {
-        DownloadConfiguration config = new DownloadConfiguration(AUTHOR_KWS, MESH_TERMS);
-        ArticleDownloader downloader = new ArticleDownloader(config);
-        Set<DynaArticle> articles = downloader.getDynaArticles("whey protein", 2000);
-        
-        assertArticlesContainData(articles);
-        
-        for (DynaArticle article : articles) {
-            Set<String> meshTerms = (Set<String>) article.getAttribute(MESH_TERMS).getValue();
-            Set<String> authorKWs = (Set<String>) article.getAttribute(AUTHOR_KWS).getValue();
-            assertNotNull(meshTerms);
-            assertTrue(!meshTerms.isEmpty());
-            assertNotNull(authorKWs);
-            assertTrue(!authorKWs.isEmpty());
-        }
-    }
+//    @Test
+//    public void shouldDownloadMeshTermsAndAuthorKwsAsSet() throws Exception {
+//        DownloadConfiguration config = new DownloadConfiguration(AUTHOR_KWS, MESH_TERMS);
+//        ArticleDownloader downloader = new ArticleDownloader(config);
+//        Set<DynaArticle> articles = downloader.getDynaArticles("whey protein", 2000);
+//        
+//        assertArticlesContainData(articles);
+//        
+//        for (DynaArticle article : articles) {
+//            Set<String> meshTerms = (Set<String>) article.getAttribute(MESH_TERMS).getValue();
+//            Set<String> authorKWs = (Set<String>) article.getAttribute(AUTHOR_KWS).getValue();
+//            assertNotNull(meshTerms);
+//            assertTrue(!meshTerms.isEmpty());
+//            assertNotNull(authorKWs);
+//            assertTrue(!authorKWs.isEmpty());
+//        }
+//    }
     
     @Test
     public void throwEmptyObjectExceptionWhenRequestEmptyGeneratedKwsList() throws Exception {
