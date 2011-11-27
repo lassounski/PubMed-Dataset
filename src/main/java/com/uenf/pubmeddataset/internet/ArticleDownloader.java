@@ -95,9 +95,9 @@ public class ArticleDownloader {
     
     /**
      * Get the PMID List for the query
-     * @param term term to be queried
-     * @param maxHits number of maximum results from PubMed
-     * @return List<String> - Lista de identificadores.
+     * @param term - to be queried
+     * @param maxHits - number of maximum results from PubMed
+     * @return Set<String> - Lista de identificadores.
      */
     public Set<String> getIds(String term, int maxHits) {
         String url = searchPubMedUrl;
@@ -113,6 +113,32 @@ public class ArticleDownloader {
             idsOut.add(e.getValue());
         }
         System.out.println("Ids retieved: " + idsOut.size());
+        return idsOut;
+    }
+    
+    /**
+     * Get the PMID List for the query
+     * @param term - to be queried
+     * @param first - the starting id to be downloaded
+     * @parm pageSize - the offset
+     * @return List<String> - Id list.
+     */
+    public List getIds(String term, int first, int pageSize) {
+        System.out.println("Downloader: retrieving ids from " + first + " to " + (first + pageSize));
+
+        String url = searchPubMedUrl;
+        url += "&term=" + normalizeSearchTerm(term) + "&retstart=" + first + "&retmax=" + pageSize;
+        build(url);
+
+        List ids = root.getChild("IdList").getChildren();
+        Iterator idsIt = ids.iterator();
+
+        List<String> idsOut = new ArrayList<String>(ids.size());
+        while (idsIt.hasNext()) {
+            Element e = (Element) idsIt.next();
+            idsOut.add(e.getValue());
+        }
+        System.out.println("Downloader: retrieved ids = " + idsOut.size());
         return idsOut;
     }
 
