@@ -27,9 +27,11 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class DataSetTest {
 
+    DownloadConfiguration config = new DownloadConfiguration(ABSTRACT, TITLE, PMID, MESH_TERMS);
+    
     @Test
     public void shouldGenerateKeyWords() throws Exception {
-        DownloadConfiguration config = new DownloadConfiguration(ABSTRACT, TITLE, PMID);
+        
         ArticleDownloader downloader = new ArticleDownloader(config);
         Set<DynaArticle> articles = downloader.getDynaArticles("whey protein", 10);
         ConceptDataSet cds = new ConceptDataSet(articles, "whey protein");
@@ -53,7 +55,6 @@ public class DataSetTest {
      */
     @Test
     public void shouldIntersectMeshTermsWithTheAbstractText() throws Exception {
-        DownloadConfiguration config = new DownloadConfiguration(ABSTRACT, MESH_TERMS);
         DynaArticle article = new DynaArticle(config);
         article.put(ABSTRACT, "Kirill Lassounski Fodastico Horrores");
         Set<String> meshTerms = new HashSet<String>();
@@ -81,7 +82,6 @@ public class DataSetTest {
 
     @Test
     public void shouldRemoveArticleFromDataSetIfIntersectionResultInEmptyMeshTermsSet() throws Exception {
-        DownloadConfiguration config = new DownloadConfiguration(ABSTRACT, MESH_TERMS);
         DynaArticle article = new DynaArticle(config);
         article.put(ABSTRACT, "Kirill Lassounski Fodastico Horrores");
         Set<String> meshTerms = new HashSet<String>();
@@ -104,7 +104,6 @@ public class DataSetTest {
      */
     @Test
     public void shouldRemoveSearchTermFromArticleAvailiableData() throws Exception {
-        DownloadConfiguration config = new DownloadConfiguration(ABSTRACT, MESH_TERMS);
         DynaArticle article = new DynaArticle(config);
         article.put(ABSTRACT, "Kirill Lassounski Fodastico Horrores");
         Set<String> meshTerms = new HashSet<String>();
@@ -133,7 +132,6 @@ public class DataSetTest {
 
     @Test
     public void shouldRemoveArticleIfRunsOutOfWordsAfterSearchTermRemoval() throws Exception {
-        DownloadConfiguration config = new DownloadConfiguration(ABSTRACT, MESH_TERMS);
         DynaArticle article = new DynaArticle(config);
         article.put(ABSTRACT, "Kirill Lassounski");
         Set<String> meshTerms = new HashSet<String>();
@@ -147,10 +145,8 @@ public class DataSetTest {
 
         assertTrue(cds.getArticles().isEmpty());
     }
-
 }
 
-//REFATORAR METODO PUT EM DYNAARTICLE PARA ACEITAR O ENUM
 class ConceptDataSet extends DataSet {
 
     ConceptDataSet(Set<DynaArticle> articles, String searchTerm) {

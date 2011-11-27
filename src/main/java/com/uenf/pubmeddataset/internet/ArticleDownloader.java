@@ -82,6 +82,18 @@ public class ArticleDownloader {
     }
 
     /**
+     * 
+     * @param term - to be queried
+     * @return int - the total number of articles found on PubMed related to this SearchTerm
+     */
+    public int getResultsCount(String term) {
+        String url = searchPubMedUrl;
+        url += "&term=" + normalizeSearchTerm(term);
+        build(url);
+        return Integer.parseInt(root.getChild("Count").getValue());
+    }
+    
+    /**
      * Get the PMID List for the query
      * @param term term to be queried
      * @param maxHits number of maximum results from PubMed
