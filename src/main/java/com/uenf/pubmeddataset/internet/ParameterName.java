@@ -11,7 +11,8 @@ package com.uenf.pubmeddataset.internet;
 public enum ParameterName {
     PMID("PMID","java.lang.String"),ABSTRACT("AbstractText","java.lang.String"),TITLE("Title","java.lang.String"),
         MESH_TERMS("MeshTerms","java.util.Set"), AUTHOR_KWS("AuthorKeyWords","java.util.Set"), 
-        PUB_YEAR("PublicationYear","java.lang.String"), AUTHOR_NAMES("AuthorNames","java.util.List");
+        PUB_YEAR("PublicationYear","java.lang.String"), AUTHOR_NAMES("AuthorNames","java.util.List"),
+        JOURNAL_TITLE("JournalTitle","java.lang.String");
 
         private String parameterName;
         private Class parameterClass;

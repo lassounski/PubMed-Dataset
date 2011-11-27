@@ -12,12 +12,6 @@ import java.io.Serializable;
  */
 public class ArticleAttribute implements Serializable{
 
-    static class NullValueException extends Exception {
-
-        public NullValueException(String message) {
-            super(message);
-        }
-    }
 
     private String name;
     private Class type;

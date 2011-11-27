@@ -39,8 +39,4 @@ public class DownloadConfiguration {
         return downloadParameters;
     }
 
-    //REFACTOR
-    public String getParameterName(int parameterInt) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 }

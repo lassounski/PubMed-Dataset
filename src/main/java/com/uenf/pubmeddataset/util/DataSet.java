@@ -4,7 +4,6 @@
  */
 package com.uenf.pubmeddataset.util;
 
-import com.uenf.pubmeddataset.util.ArticleAttribute.NullValueException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;

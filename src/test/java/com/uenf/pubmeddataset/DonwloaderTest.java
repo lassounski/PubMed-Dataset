@@ -4,12 +4,12 @@
  */
 package com.uenf.pubmeddataset;
 
+import com.uenf.pubmeddataset.util.NullValueException;
 import com.uenf.pubmeddataset.internet.ArticleDownloader;
 import com.uenf.pubmeddataset.internet.DownloadConfiguration;
 import com.uenf.pubmeddataset.util.DynaArticle;
 import static com.uenf.pubmeddataset.internet.ParameterName.*;
 import java.util.List;
-import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,7 +29,7 @@ public class DonwloaderTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        DownloadConfiguration config = new DownloadConfiguration(PUB_YEAR,AUTHOR_NAMES);
+        DownloadConfiguration config = new DownloadConfiguration(PUB_YEAR,AUTHOR_NAMES,JOURNAL_TITLE);
         downloader = new ArticleDownloader(config);
     }
 
@@ -64,8 +64,12 @@ public class DonwloaderTest {
     }
     
     @Test
-    public void shouldDownloadJournal() {
-        
+    public void shouldDownloadJournal() throws NoSuchFieldException, NullValueException {
+        List<DynaArticle> articles = getArticles(10);
+        for(DynaArticle a:articles){
+            String journalName = (String)a.getAttribute(JOURNAL_TITLE).getValue();
+            assertNotNull(journalName);
+        }
     }
 
     private List<DynaArticle> getArticles(int numberOfArticles) {

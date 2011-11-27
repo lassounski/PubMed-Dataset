@@ -111,7 +111,7 @@ public class ArticleDownloader {
         build(url);
         return Integer.parseInt(root.getChild("Count").getValue());
     }
-    
+
     /**
      * Get the PMID List for the query
      * @param term to be queried
@@ -134,7 +134,7 @@ public class ArticleDownloader {
         System.out.println("Ids retieved: " + idsOut.size());
         return idsOut;
     }
-    
+
     /**
      * Get the PMID List for the query
      * @param term to be queried
@@ -190,7 +190,7 @@ public class ArticleDownloader {
                 idList.add(idsIt.next());
             }
             articles.addAll(downloadArticles(idList));
-            System.out.println("Downloaded " + articles.size() + " abstracts" + " - from("+splitCounter+"/"+splitNumber+")");
+            System.out.println("Downloaded " + articles.size() + " abstracts" + " - from(" + splitCounter + "/" + splitNumber + ")");
             splitCounter += 1;
         }
         return articles;
@@ -218,8 +218,7 @@ public class ArticleDownloader {
         System.out.println("Downloader: downloaded " + articles.size() + " articles");
         return articles;
     }
-    
-    
+
     protected Set<DynaArticle> downloadArticles(List<String> ids) {
         Set<DynaArticle> articles = new HashSet<DynaArticle>(ids.size() / 2);
         String idsString = formatIds(ids);
@@ -304,7 +303,7 @@ public class ArticleDownloader {
         return title;
     }
 
-    private Set<String> getAuthorKeyWords(Element e){
+    private Set<String> getAuthorKeyWords(Element e) {
         Set<String> keyWords = new HashSet<String>();
         List keyWordsList;
         try {
@@ -314,30 +313,30 @@ public class ArticleDownloader {
             return null;
         }
         Iterator i = keyWordsList.iterator();
-        while(i.hasNext()){
+        while (i.hasNext()) {
             Element keyWordElement = (Element) i.next();
             String keyWord = keyWordElement.getValue().toLowerCase();
             keyWords.add(keyWord);
         }
         return keyWords;
     }
-    
-    private List<String> getAuthorNames(Element e){
+
+    private List<String> getAuthorNames(Element e) {
         List<String> authorNames = new ArrayList<String>();
-        try{
+        try {
             List<Element> authorNamesList = e.getChild("MedlineCitation").getChild("Article").getChild("AuthorList").getChildren();
-            for(Element author:authorNamesList){
+            for (Element author : authorNamesList) {
                 StringBuilder name = new StringBuilder();
                 name.append(author.getChildText("ForeName")).append(" ");
                 name.append(author.getChildText("LastName"));
                 authorNames.add(name.toString());
             }
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.out.println("Could not retrieve author names");
         }
         return authorNames;
     }
-    
+
     private Set<String> getMeshTerms(Element e) {
 
         Set<String> keyWords = new HashSet<String>();
@@ -368,7 +367,7 @@ public class ArticleDownloader {
         }
         return keyWords;
     }
-    
+
     private String getPublicationYear(Element e) {
         String year = null;
         try {
@@ -376,14 +375,25 @@ public class ArticleDownloader {
             e = e.getChild("MedlineCitation").getChild("Article").getChild("Journal").getChild("JournalIssue").getChild("PubDate");
             year = e.getChild("Year").getValue();
         } catch (NullPointerException ex) {
-            try{
+            try {
                 String medlineDate = e.getChild("MedlineDate").getValue();
                 return medlineDate.substring(0, medlineDate.indexOf(" "));
-            }catch(NullPointerException ex2){
+            } catch (NullPointerException ex2) {
                 System.out.println("PublicationYear Not Found");
-            }            
+            }
         }
         return year;
+    }
+
+    private String getJournalTitle(Element e) {
+        String journalTitle = null;
+        try {
+            journalTitle = e.getChild("MedlineCitation").getChild("Article").getChild("Journal").getChildText("Title");
+        } catch (NullPointerException ex) {
+            System.out.println("JournalTitle Not Found");
+        }
+
+        return journalTitle;
     }
 
     private void storeKwdsFromDescriptorAndQualifier(String descriptor, List<Element> qualifiers, Set<String> kwds) {
