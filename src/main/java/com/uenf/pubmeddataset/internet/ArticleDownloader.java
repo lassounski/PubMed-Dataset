@@ -36,9 +36,18 @@ public class ArticleDownloader {
     private Element root;
     private final String searchPubMedUrl = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmode=xml&db=pubmed";
     private final String fetchPubMedUrl = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?retmode=xml&db=pubmed&id=";
+    private boolean mandatoryAttributes = true;
 
     public ArticleDownloader(DownloadConfiguration config) {
         this.downloadConfig = config;
+    }
+
+    public boolean isMandatoryAttributes() {
+        return mandatoryAttributes;
+    }
+
+    public void setMandatoryAttributes(boolean mandatoryAttributes) {
+        this.mandatoryAttributes = mandatoryAttributes;
     }
 
     /**
@@ -238,7 +247,7 @@ public class ArticleDownloader {
                 Method privateMet = downloaderClass.getDeclaredMethod(getter, Class.forName("org.jdom.Element"));
                 privateMet.setAccessible(true);
                 paramValue = privateMet.invoke(this, pubMedArticleElement);
-                if (paramValue == null) {
+                if (mandatoryAttributes == true && paramValue == null) {
                     return null;
                 }
             } catch (Exception e) {
@@ -303,6 +312,22 @@ public class ArticleDownloader {
         return keyWords;
     }
     
+    private List<String> getAuthorNames(Element e){
+        List<String> authorNames = new ArrayList<String>();
+        try{
+            List<Element> authorNamesList = e.getChild("MedlineCitation").getChild("Article").getChild("AuthorList").getChildren();
+            for(Element author:authorNamesList){
+                StringBuilder name = new StringBuilder();
+                name.append(author.getChildText("ForeName")).append(" ");
+                name.append(author.getChildText("LastName"));
+                authorNames.add(name.toString());
+            }
+        }catch(NullPointerException ex){
+            System.out.println("Could not retrieve author names");
+        }
+        return authorNames;
+    }
+    
     private Set<String> getMeshTerms(Element e) {
 
         Set<String> keyWords = new HashSet<String>();
@@ -332,6 +357,23 @@ public class ArticleDownloader {
             }
         }
         return keyWords;
+    }
+    
+    private String getPublicationYear(Element e) {
+        String year = null;
+        try {
+            //gets the publication date element
+            e = e.getChild("MedlineCitation").getChild("Article").getChild("Journal").getChild("JournalIssue").getChild("PubDate");
+            year = e.getChild("Year").getValue();
+        } catch (NullPointerException ex) {
+            try{
+                String medlineDate = e.getChild("MedlineDate").getValue();
+                return medlineDate.substring(0, medlineDate.indexOf(" "));
+            }catch(NullPointerException ex2){
+                System.out.println("PublicationYear Not Found");
+            }            
+        }
+        return year;
     }
 
     private void storeKwdsFromDescriptorAndQualifier(String descriptor, List<Element> qualifiers, Set<String> kwds) {
