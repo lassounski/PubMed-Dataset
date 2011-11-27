@@ -178,11 +178,29 @@ public class ArticleDownloader {
     }
 
     /**
-     * Downloads a List of Id`s
-     * @param ids
-     * @return
-     * @throws Exception
+     * Downloads a List of DynaArticles
+     * @param ids - to be downloaded
+     * @return List - of DynaArticless
      */
+    public List<DynaArticle> downloadArticlesList(List<String> ids) {
+        System.out.println("Downloader: downloading " + ids.size() + " articles...");
+        List<DynaArticle> articles = new ArrayList<DynaArticle>(ids.size());
+        String idsString = formatIds(ids);
+        String url = fetchPubMedUrl + idsString;
+        build(url);
+        List pubMedArticleElements = root.getChildren();
+
+        for (Iterator pubMedArticlesIt = pubMedArticleElements.iterator(); pubMedArticlesIt.hasNext();) {
+            DynaArticle dynaArticle = extractAttributes(pubMedArticlesIt.next());
+            if (dynaArticle != null) {
+                articles.add(dynaArticle);
+            }
+        }
+        System.out.println("Downloader: downloaded " + articles.size() + " articles");
+        return articles;
+    }
+    
+    
     protected Set<DynaArticle> downloadArticles(List<String> ids) {
         Set<DynaArticle> articles = new HashSet<DynaArticle>(ids.size() / 2);
         String idsString = formatIds(ids);
