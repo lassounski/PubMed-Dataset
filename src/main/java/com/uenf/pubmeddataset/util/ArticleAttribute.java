@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class ArticleAttribute implements Serializable{
 
-    private static class NullValueException extends Exception {
+    static class NullValueException extends Exception {
 
         public NullValueException(String message) {
             super(message);
@@ -36,7 +36,7 @@ public class ArticleAttribute implements Serializable{
         return type;
     }
 
-    public Object getValue() throws Exception {
+    public Object getValue() throws NullValueException {
         if(value == null)
             throw new NullValueException("The value is null");
         return value;

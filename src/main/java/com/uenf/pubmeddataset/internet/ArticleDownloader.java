@@ -42,6 +42,16 @@ public class ArticleDownloader {
         this.downloadConfig = config;
     }
 
+    /**
+     * 
+     * @param config download configuration
+     * @param mandatoryAttributes  specifies if all the attributes in download configuration are mandatory or not
+     */
+    public ArticleDownloader(DownloadConfiguration config, boolean mandatoryAttributes) {
+        this.downloadConfig = config;
+        this.mandatoryAttributes = mandatoryAttributes;
+    }
+
     public boolean isMandatoryAttributes() {
         return mandatoryAttributes;
     }
@@ -92,8 +102,8 @@ public class ArticleDownloader {
 
     /**
      * 
-     * @param term - to be queried
-     * @return int - the total number of articles found on PubMed related to this SearchTerm
+     * @param term to be queried
+     * @return int the total number of articles found on PubMed related to this SearchTerm
      */
     public int getResultsCount(String term) {
         String url = searchPubMedUrl;
@@ -104,9 +114,9 @@ public class ArticleDownloader {
     
     /**
      * Get the PMID List for the query
-     * @param term - to be queried
-     * @param maxHits - number of maximum results from PubMed
-     * @return Set<String> - Lista de identificadores.
+     * @param term to be queried
+     * @param maxHits number of maximum results from PubMed
+     * @return Set<String> Id`s list.
      */
     public Set<String> getIds(String term, int maxHits) {
         String url = searchPubMedUrl;
@@ -127,12 +137,12 @@ public class ArticleDownloader {
     
     /**
      * Get the PMID List for the query
-     * @param term - to be queried
-     * @param first - the starting id to be downloaded
-     * @parm pageSize - the offset
-     * @return List<String> - Id list.
+     * @param term to be queried
+     * @param first the starting id to be downloaded
+     * @parm pageSize the offset
+     * @return List<String> Id list.
      */
-    public List getIds(String term, int first, int pageSize) {
+    public List<String> getIds(String term, int first, int pageSize) {
         System.out.println("Downloader: retrieving ids from " + first + " to " + (first + pageSize));
 
         String url = searchPubMedUrl;
@@ -188,8 +198,8 @@ public class ArticleDownloader {
 
     /**
      * Downloads a List of DynaArticles
-     * @param ids - to be downloaded
-     * @return List - of DynaArticless
+     * @param ids to be downloaded
+     * @return List of DynaArticless
      */
     public List<DynaArticle> downloadArticlesList(List<String> ids) {
         System.out.println("Downloader: downloading " + ids.size() + " articles...");

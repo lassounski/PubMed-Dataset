@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Test;
 import static com.uenf.pubmeddataset.internet.ParameterName.*;
 import static org.junit.Assert.*;
@@ -28,10 +30,10 @@ import static org.hamcrest.CoreMatchers.*;
 public class DataSetTest {
 
     DownloadConfiguration config = new DownloadConfiguration(ABSTRACT, TITLE, PMID, MESH_TERMS);
-    
+
     @Test
     public void shouldGenerateKeyWords() throws Exception {
-        
+
         ArticleDownloader downloader = new ArticleDownloader(config);
         Set<DynaArticle> articles = downloader.getDynaArticles("whey protein", 10);
         ConceptDataSet cds = new ConceptDataSet(articles, "whey protein");
@@ -40,7 +42,7 @@ public class DataSetTest {
             List<String> genKws = (List<String>) article.getGeneratedKws();
             for (String kw : genKws) {
                 assertNotNull(kw);
-                if(kw.length() < 0){
+                if (kw.length() < 0) {
                     fail();
                 }
             }
@@ -126,7 +128,7 @@ public class DataSetTest {
         assertThat(alteredMeshTerms.size(), is(equalTo(3)));
 
         List<String> generatedKws = (List) alteredArticle.getGeneratedKws();
-        assertThat(generatedKws, hasItems("Kirill", "Lassounski","Fodastico","Horrores"));
+        assertThat(generatedKws, hasItems("Kirill", "Lassounski", "Fodastico", "Horrores"));
         assertThat(generatedKws.size(), is(equalTo(4)));
     }
 
@@ -158,14 +160,15 @@ class ConceptDataSet extends DataSet {
         for (Iterator<DynaArticle> articleIt = this.getArticleIt(); articleIt.hasNext();) {
             DynaArticle article = articleIt.next();
             String abstractText = null;
+
             try {
                 abstractText = (String) article.getAttribute(ABSTRACT).getValue();
-            } catch (NoSuchFieldException e) {
-                System.out.println("Abstract nao existe");
+            } catch (Exception ex) {
+                Logger.getLogger(ConceptDataSet.class.getName()).log(Level.SEVERE, null, ex);
             }
+
             String[] tokens = abstractText.split(" ");
             article.setGeneratedKeyWords(new ArrayList(Arrays.asList(tokens)));
         }
     }
-
 }
