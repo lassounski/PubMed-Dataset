@@ -118,7 +118,7 @@ public class ArticleDownloader {
      * @param maxHits number of maximum results from PubMed
      * @return Set<String> Id`s list.
      */
-    public Set<String> getIds(String term, int maxHits) {
+    public List<String> getIds(String term, int maxHits) {
         String url = searchPubMedUrl;
         url += "&term=" + term + "&retmax=" + maxHits;
         build(url);
@@ -126,7 +126,7 @@ public class ArticleDownloader {
         List ids = root.getChild("IdList").getChildren();
         Iterator idsIt = ids.iterator();
 
-        Set<String> idsOut = new HashSet<String>(ids.size());
+        List<String> idsOut = new ArrayList<String>(ids.size());
         while (idsIt.hasNext()) {
             Element e = (Element) idsIt.next();
             idsOut.add(e.getValue());
@@ -167,10 +167,10 @@ public class ArticleDownloader {
      * @param maxHits number of maximum results from PubMed
      * @return a Set containing DynaArticle`s
      */
-    public Set<DynaArticle> getDynaArticles(String searchTerm, int maxHits) {
-        Set<DynaArticle> articles = new HashSet<DynaArticle>(maxHits / 2);
+    public List<DynaArticle> getDynaArticles(String searchTerm, int maxHits) {
+        List<DynaArticle> articles = new ArrayList<DynaArticle>(maxHits / 2);
         searchTerm = normalizeSearchTerm(searchTerm);
-        Set<String> ids = getIds(searchTerm, maxHits);
+        List<String> ids = getIds(searchTerm, maxHits);
 
         //List with the ID`s that will be downloaded on current round
         List<String> idList = new ArrayList<String>(splitFactor);
@@ -201,7 +201,7 @@ public class ArticleDownloader {
      * @param ids to be downloaded
      * @return List of DynaArticless
      */
-    public List<DynaArticle> downloadArticlesList(List<String> ids) {
+    public List<DynaArticle> downloadArticles(List<String> ids) {
         System.out.println("Downloader: downloading " + ids.size() + " articles...");
         List<DynaArticle> articles = new ArrayList<DynaArticle>(ids.size());
         String idsString = formatIds(ids);
@@ -216,22 +216,6 @@ public class ArticleDownloader {
             }
         }
         System.out.println("Downloader: downloaded " + articles.size() + " articles");
-        return articles;
-    }
-
-    protected Set<DynaArticle> downloadArticles(List<String> ids) {
-        Set<DynaArticle> articles = new HashSet<DynaArticle>(ids.size() / 2);
-        String idsString = formatIds(ids);
-        String url = fetchPubMedUrl + idsString;
-        build(url);
-        List pubMedArticleElements = root.getChildren();
-
-        for (Iterator pubMedArticlesIt = pubMedArticleElements.iterator(); pubMedArticlesIt.hasNext();) {
-            DynaArticle dynaArticle = extractAttributes(pubMedArticlesIt.next());
-            if (dynaArticle != null) {
-                articles.add(dynaArticle);
-            }
-        }
         return articles;
     }
 

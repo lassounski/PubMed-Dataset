@@ -26,7 +26,7 @@ import static com.uenf.pubmeddataset.internet.ParameterName.*;
  */
 public class ArticleDynaBeanProcessTest {
 
-    private static Set<DynaArticle> articles;
+    private static List<DynaArticle> articles;
 
     @BeforeClass
     public static void setUp() {
@@ -117,7 +117,7 @@ public class ArticleDynaBeanProcessTest {
     public void allowDownloadOfNullValues() {
         DownloadConfiguration config = new DownloadConfiguration(MESH_TERMS);
         ArticleDownloader downloader = new ArticleDownloader(config,false);
-        List<DynaArticle> articles = downloader.downloadArticlesList(downloader.getIds("tuberculosis", 0, 50));
+        List<DynaArticle> articles = downloader.downloadArticles(downloader.getIds("tuberculosis", 0, 50));
         assertTrue(articles.size() == 50);
     }
 
@@ -128,7 +128,7 @@ public class ArticleDynaBeanProcessTest {
         }
     }
 
-    private void assertArticlesContainData(Set<DynaArticle> articles) throws EmptyObjectException, ClassNotFoundException, Exception {
+    private void assertArticlesContainData(List<DynaArticle> articles) throws EmptyObjectException, ClassNotFoundException, Exception {
         if (articles.isEmpty()) {
             fail("There are no articles in the set evaluated");
         }

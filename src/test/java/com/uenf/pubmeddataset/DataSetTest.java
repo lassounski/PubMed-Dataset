@@ -4,6 +4,9 @@
  */
 package com.uenf.pubmeddataset;
 
+import java.util.Collection;
+import com.uenf.pubmeddataset.util.EmptyObjectException;
+import com.uenf.pubmeddataset.util.NullValueException;
 import com.uenf.pubmeddataset.internet.ArticleDownloader;
 import com.uenf.pubmeddataset.internet.DownloadConfiguration;
 import com.uenf.pubmeddataset.util.DataSet;
@@ -35,7 +38,7 @@ public class DataSetTest {
     public void shouldGenerateKeyWords() throws Exception {
 
         ArticleDownloader downloader = new ArticleDownloader(config);
-        Set<DynaArticle> articles = downloader.getDynaArticles("whey protein", 10);
+        List<DynaArticle> articles = downloader.getDynaArticles("whey protein", 10);
         ConceptDataSet cds = new ConceptDataSet(articles, "whey protein");
         cds.generateKeyWords();
         for (DynaArticle article : articles) {
@@ -114,7 +117,7 @@ public class DataSetTest {
         meshTerms.add("Kirill");
         meshTerms.add("Fodastico Horrores");
         article.put(MESH_TERMS, meshTerms);
-        Set<DynaArticle> articles = new HashSet<DynaArticle>();
+        List<DynaArticle> articles = new ArrayList<DynaArticle>();
         articles.add(article);
 
         ConceptDataSet cds = new ConceptDataSet(articles, "Fodastico Horrores");
@@ -139,7 +142,7 @@ public class DataSetTest {
         Set<String> meshTerms = new HashSet<String>();
         meshTerms.add("Kirill");
         article.put(MESH_TERMS, meshTerms);
-        Set<DynaArticle> articles = new HashSet<DynaArticle>();
+        List<DynaArticle> articles = new ArrayList<DynaArticle>();
         articles.add(article);
         ConceptDataSet cds = new ConceptDataSet(articles, "Kirill");
         cds.generateKeyWords();
@@ -151,7 +154,7 @@ public class DataSetTest {
 
 class ConceptDataSet extends DataSet {
 
-    ConceptDataSet(Set<DynaArticle> articles, String searchTerm) {
+    ConceptDataSet(Collection<DynaArticle> articles, String searchTerm) {
         super(articles, searchTerm);
     }
 
@@ -170,5 +173,76 @@ class ConceptDataSet extends DataSet {
             String[] tokens = abstractText.split(" ");
             article.setGeneratedKeyWords(new ArrayList(Arrays.asList(tokens)));
         }
+    }
+    
+    /**
+     * Makes the intersection between MeshTerms and AbstractText if availiable.
+     * If an article runs out of MeshTerms it is removed from the dataset.
+     */
+    public void intersectMeshTermsWithAbstract() throws Exception {
+        List<DynaArticle> removeArticleList = new ArrayList<DynaArticle>();
+        
+        nullAttribute:
+        for (DynaArticle article : articles) {
+            String abstractText = null;
+            Set<String> meshTerms = null;
+            try {
+                abstractText = (String) article.getAttribute(ABSTRACT).getValue();
+                meshTerms = (Set<String>) article.getAttribute(MESH_TERMS).getValue();
+            } catch (Exception ex) {
+                Logger.getLogger(DataSet.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Attribute for " + (String) article.getAttribute(PMID).getValue() + " is null");
+                continue nullAttribute;
+            }
+            List<String> removeTermList = new ArrayList<String>();
+            for (String term : meshTerms) {
+                if (!abstractText.contains(term)) {
+                    removeTermList.add(term);
+                }
+            }
+            meshTerms.removeAll(removeTermList);
+            if (meshTerms.isEmpty()) {
+                removeArticleList.add(article);
+            }
+        }
+        articles.removeAll(removeArticleList);
+    }
+
+    /**
+     * Removes the searchTerm from the MeshTerms if avaliable
+     * Remove o termo que foi utilizado na busca do conjunto de palavras geradas e
+     * do conjunto de palavras definidas.
+     */
+    public void removeSearchTermFromData() {
+        List articlesToRemove = new ArrayList();
+        
+        nullAttribute:
+        for (DynaArticle article : articles) {
+            Set<String> meshTerms = null;
+            List generatedkws = null;
+            try {
+                try {
+                    meshTerms = (Set<String>) article.getAttribute(MESH_TERMS).getValue();
+                } catch (NullValueException ex) {
+                    Logger.getLogger(DataSet.class.getName()).log(Level.SEVERE, null, ex);
+                    continue nullAttribute;
+                }
+                meshTerms.remove(searchTerm);
+                if (meshTerms.isEmpty()) {
+                    articlesToRemove.add(article);
+                }
+            } catch (NoSuchFieldException e) {
+                System.out.println("There are no Mesh Terms");
+                continue nullAttribute;
+            }
+            try {
+                generatedkws = (List) article.getGeneratedKws();
+                generatedkws.remove(searchTerm);
+            } catch (EmptyObjectException e) {
+                System.out.println("There are no Generated Key Words");
+                continue nullAttribute;
+            }
+        }
+        articles.removeAll(articlesToRemove);
     }
 }

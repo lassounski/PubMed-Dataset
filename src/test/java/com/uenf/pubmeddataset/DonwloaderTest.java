@@ -74,7 +74,7 @@ public class DonwloaderTest {
 
     private List<DynaArticle> getArticles(int numberOfArticles) {
         List ids = downloader.getIds("mycobacterium", 1, numberOfArticles);
-        List articles = downloader.downloadArticlesList(ids);
+        List articles = downloader.downloadArticles(ids);
         assertEquals(numberOfArticles, articles.size());
         return articles;
     }
